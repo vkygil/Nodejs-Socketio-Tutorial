@@ -67,8 +67,11 @@ http.listen(port, function(){
 ```sh
 <!doctype html>
 <html>
+
 <head>
     <title>Socket.IO chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         * {
             margin: 0;
@@ -79,10 +82,12 @@ http.listen(port, function(){
 
         body {
             font: 13px Helvetica, Arial;
+      
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAATklEQVQoU2NkYGAwZmBgOMuAACA+CKCIMSIpADGRNaEYgKwQ3WQUjTCF6CYhWw2WAynEpgjmIpg7jUlSiM0TWK2GWUOUZ7ApxggeogIcABHJFtftKVfJAAAAAElFTkSuQmCC) repeat;
         }
 
         form {
-            background: #000;
+
             padding: 3px;
             position: fixed;
             bottom: 0;
@@ -90,38 +95,41 @@ http.listen(port, function(){
         }
 
         form input {
-            border: 0;
+            border: 4px solid;
             padding: 10px;
+            border-radius: 30px;
             width: 90%;
             margin-right: .5%;
         }
 
         form button {
             width: 9%;
-            background: rgb(130, 224, 255);
+            border-radius: 30px;
+            background: rgb(55, 255, 23);
             border: none;
             padding: 10px;
         }
 
         #messages {
+
             list-style-type: none;
-            margin: 0;
+            margin-bottom: 40px;
+            margin: 0 10px;
             padding: 0;
         }
 
         #messages li {
             background: gainsboro;
             padding: 10px 20px;
-            margin: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
             border-radius: 50px;
             display: table;
         }
- 
-        #messages {
-            margin-bottom: 40px
-        }
-        .miMensaje{
-            background:greenyellow !important;
+
+        .miMensaje {
+            background: greenyellow !important;
+            margin-left: auto;
         }
     </style>
 </head>
@@ -140,7 +148,8 @@ http.listen(port, function(){
         $(function () {
             var socket = io();
             $('form').submit(function () {
-                socket.emit('chat message', [user, $('#m').val()]);
+                if ($('#m').val() != "")
+                    socket.emit('chat message', [user, $('#m').val()]);
                 $('#m').val('');
                 return false;
             });
@@ -148,13 +157,22 @@ http.listen(port, function(){
                 if (msg[0] == user) {
                     $('#messages').append($('<li>').text(msg[1]).addClass("miMensaje"));
                 } else {
-                    $('#messages').append($('<li>').text(msg[0] +": " + msg[1]));
+                    var txt1 = $("<b>").text(msg[0]);
+                    var txt2 = document.createElement("br");
+                    var txt3 = $("<p>").text(msg[1]);
+
+                    var txt4 = $('<li>').append(txt1);
+                    txt4.append(txt2);
+                    txt4.append(txt3);
+
+                    $('#messages').append(txt4);
                 }
                 window.scrollTo(0, document.body.scrollHeight);
             });
         });
     </script>
 </body>
+
 </html>
 ```
 
